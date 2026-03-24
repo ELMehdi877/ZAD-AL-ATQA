@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('etudiant_id')->constrained('etudiants');
             $table->foreignId('competition_id')->constrained('competitions');
+            $table->unique(['etudiant_id', 'competition_id']);
             $table->enum('statut',['en_attente', 'accepte', 'refuse', 'valide']);
             $table->timestamps();
         });

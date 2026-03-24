@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('halaqas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('enseignant_id')->constrained('enseignants');
+            $table->foreignId('enseignant_id')->constrained('users');
             $table->string('nom');
-            $table->integer('capacite');
+            $table->integer('capacite')->unsigned();
             $table->timestamps();
         });
     }

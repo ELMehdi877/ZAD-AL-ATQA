@@ -13,15 +13,9 @@ return new class extends Migration
     {
         Schema::create('etudiants', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->constrained('parents');
-            $table->string('nom');
-            $table->string('prenom');
-            $table->string('niveau');
-            $table->integer('nomberHifz');
-            $table->string('email')->unique();
-            $table->string('telephone')->unique()->nullable();
-            $table->string('password');
-            $table->enum('statut', ['active', 'desactive']);
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete(); // lien avec users
+            $table->foreignId('parent_id')->constrained('users'); // parent est aussi un user
+            $table->integer('nombre_hifz');
             $table->timestamps();
         });
     }

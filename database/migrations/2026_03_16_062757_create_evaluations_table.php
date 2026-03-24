@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('evaluations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('enseignant_id')->constrained('enseignants');
+            $table->foreignId('enseignant_id')->constrained('users');
             $table->foreignId('etudiant_id')->constrained('etudiants');
             $table->integer('hizb');
             $table->integer('huitieme');
-            $table->decimal('note');
-            $table->text('remarque');
-            $table->enum('presance', ['present', 'absent', 'retard']);
+            $table->decimal('note', 5, 2);
+            $table->text('remarque')->nullable();
+            $table->enum('presence', ['present', 'absent', 'retard']);
             $table->timestamps();
         });
     }

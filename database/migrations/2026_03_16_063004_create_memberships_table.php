@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('etudiant_id')->constrained('enseignants');
-            $table->foreignId('halaqa_id')->constrained('enseignants');
-            $table->string('role');
-            $table->boolean('statut');
+            $table->foreignId('etudiant_id')->constrained('etudiants');
+            $table->foreignId('halaqa_id')->constrained('halaqas');
+            $table->unique(['etudiant_id', 'halaqa_id']);
+            $table->enum('statut', ['active', 'inactive']);
             $table->timestamps();
         });
     }
