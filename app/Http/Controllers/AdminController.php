@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Http\Requests\StoreAdminRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateAdminRequest;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -62,5 +64,18 @@ class AdminController extends Controller
     public function destroy(Admin $admin)
     {
         //
+    }
+
+    public function storeUser(StoreUserRequest $request)
+    {
+        $data = $request->validated();
+
+        $user = User::create($data);
+
+        return [
+            'success' => 'nouveau user '.$user->nom,
+            'user' => $user
+        ];
+
     }
 }
