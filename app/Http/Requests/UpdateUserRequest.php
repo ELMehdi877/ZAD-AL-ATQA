@@ -4,8 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreUserRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,14 +23,19 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Récupère l'ID de l'utilisateur à mettre à jour
+        $userId = $this->route('user')->id ?? null;
+
         return [
             'nom' => 'required|string|min:3|max:20',
             'prenom' => 'required|string|min:3|max:20',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:8',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($userId),
+            ],
+            'password' => 'nullable|confirmed|min:8', // nullable si pas de changement
             'role' => 'required|in:admin,student,parent,teacher',
         ];
     }
-
-    
 }

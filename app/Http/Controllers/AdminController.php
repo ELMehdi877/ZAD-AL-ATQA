@@ -6,7 +6,9 @@ use App\Models\Admin;
 use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateAdminRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -15,7 +17,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::orderBy('id', 'asc')->get();
+        return view('welcome', compact('users'));
     }
 
     /**
@@ -66,16 +69,66 @@ class AdminController extends Controller
         //
     }
 
+    //Fonction pour cree un compte d'un utilisateur
     public function storeUser(StoreUserRequest $request)
     {
         $data = $request->validated();
 
+        $data['password'] = Hash::make($data['password']);
+
         $user = User::create($data);
 
-        return [
-            'success' => 'nouveau user '.$user->nom,
-            'user' => $user
-        ];
-
+        return redirect()->route('users.index')
+                ->with('success', 'Nouveau user '.$user->nom.' créé !');
     }
+
+    //Affiche tous les utilisateurs
+    public function getAllUsers()
+    {
+        $users = User::all();
+        return back()->with([
+            'users' => $users
+        ]);
+    }
+
+    //Modifie les infos d'un utilisateur
+    public function updateUser(UpdateUserRequest $request, User $user)
+    {
+        $data = $request->validated();
+
+        // Supprime le password si vide pour ne pas écraser l'existant
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('users.index')
+                ->with('success', 'update valider user '. $user->nom);
+    }
+
+    //Bloquer un user
+    public function statusUser(int $id)
+    {
+        $user = User::findOrfail($id);
+
+        if ($user->status === 'active') {
+            $user->update([
+            'status' => 'inactive'
+            ]);
+        }
+
+        else {
+            $user->update([
+            'status' => 'active'
+            ]);
+        }
+        
+
+        return redirect()->route('users.index')
+            ->with('success', 'status update');
+    }
+
+
 }
+
