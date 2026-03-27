@@ -9,4 +9,9 @@ class Cheikh extends Model
 {
     /** @use HasFactory<\Database\Factories\EnseignantFactory> */
     use HasFactory;
+
+    public function halaqas()
+    {
+        return $this->hasMany(Halaqa::class);
+    }
 }

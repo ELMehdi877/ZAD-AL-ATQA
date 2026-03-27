@@ -8,6 +8,7 @@ use App\Http\Requests\StoreHalaqaRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Halaqa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -112,9 +113,11 @@ class AdminController extends Controller
     //Cree une Halaqa
     public function storeHalaqa(StoreHalaqaRequest $request)
     {
-        $halaqa = $request->validated();
+        $data = $request->validated();
+        $halaqa = Halaqa::create($data)->attach();
 
-        
+        return ;
     }
-}
 
+
+}

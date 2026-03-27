@@ -1,188 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Test Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINKUP | Connectez-vous à votre communauté</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f3f4f9; /* Gris très clair comme le fond de l'image */
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-float { animation: float 5s ease-in-out infinite; }
+        .animate-scale { animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        /* --- STYLES INSPIRÉS DE L'IMAGE --- */
+        .rounded-custom { border-radius: 40px; } /* Coins très arrondis comme sur l'image */
+        .btn-black { 
+            background-color: #111111; 
+            color: white;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-black:hover { transform: scale(1.05); background-color: #000; }
+        
+        .card-shadow {
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05);
+        }
+
+        .bg-mesh {
+            background: radial-gradient(at 0% 0%, rgba(199, 210, 254, 0.5) 0, transparent 50%), 
+                        radial-gradient(at 100% 100%, rgba(254, 202, 202, 0.3) 0, transparent 50%);
+        }
+    </style>
 </head>
-<body>
-    <form action="{{ route('user.logout') }}" method="POST">
-        @csrf
-        <button type="submit" class="p-2 border border-2">logout</button>
-    </form>
+<body class="bg-mesh min-h-screen overflow-x-hidden">
 
-    <h2>Créer un utilisateur</h2>
+    <!-- Navbar Minimaliste -->
+    <nav class="flex justify-between items-center px-10 py-8 max-w-7xl mx-auto">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-[#111] rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-white font-bold text-xl">L</span>
+            </div>
+            <span class="text-2xl font-extrabold tracking-tight text-gray-900">LINKUP</span>
+        </div>
+        <div class="flex gap-4">
+            <a href="{{ url('/login') }}" class="px-6 py-3 font-bold text-gray-600 hover:text-black transition">Connexion</a>
+            <a href="{{ url('/register') }}" class="btn-black px-8 py-3 font-bold shadow-xl shadow-gray-200">
+                S'inscrire
+            </a>
+        </div>
+    </nav>
 
-    <form action="{{ route('user.store') }}" method="POST">
-        @csrf
-
-        <!-- Nom -->
-        <div>
-            <label>Nom :</label>
-            <input type="text" name="nom" >
-            @error('nom')
-                <div style="color:red">{{ $message }}</div>
-            @enderror
+    <!-- Hero Section -->
+    <main class="max-w-7xl mx-auto px-10 py-12 grid lg:grid-cols-2 gap-20 items-center">
+        
+        <div class="animate-scale">
+            <h1 class="text-6xl md:text-7xl font-[800] text-gray-900 leading-tight tracking-tighter mb-8">
+                L'endroit où les <span class="text-blue-500 underline decoration-4 underline-offset-8">idées</span> se rencontrent.
+            </h1>
+            <p class="text-xl text-gray-500 leading-relaxed mb-10 max-w-md">
+                Rejoignez la nouvelle expérience sociale. Simple, élégante et conçue pour vous connecter au reste du monde.
+            </p>
+            <div class="flex gap-4 items-center">
+                <a href="{{ url('/register') }}" class="btn-black px-10 py-5 text-lg font-bold">Commencer l'aventure</a>
+                <div class="flex -space-x-3">
+                    <img class="w-10 h-10 rounded-full border-4 border-white" src="https://i.pravatar.cc/100?u=1" />
+                    <img class="w-10 h-10 rounded-full border-4 border-white" src="https://i.pravatar.cc/100?u=2" />
+                    <img class="w-10 h-10 rounded-full border-4 border-white" src="https://i.pravatar.cc/100?u=3" />
+                </div>
+            </div>
         </div>
 
-        <!-- Prénom -->
-        <div>
-            <label>Prénom :</label>
-            <input type="text" name="prenom" >
-            @error('prenom')
-                <div style="color:red">{{ $message }}</div>
-            @enderror
+        <!-- Visuel Inspiré de l'image intérieure -->
+        <div class="relative animate-float">
+            <!-- Arrière-plan décoratif -->
+            <div class="absolute inset-0 bg-blue-100 rounded-[60px] blur-3xl opacity-30"></div>
+            
+            <!-- Carte Factice Dashboard (Inspirée de votre image) -->
+            <div class="relative bg-white p-8 rounded-custom card-shadow border border-gray-100">
+                <!-- Header Card -->
+                <div class="flex items-center justify-between mb-8">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center">
+                            <img src="https://i.pravatar.cc/150?u=8" class="rounded-full w-10 h-10" />
+                        </div>
+                        <div>
+                            <div class="h-3 w-24 bg-gray-200 rounded-full mb-2"></div>
+                            <div class="h-2 w-16 bg-gray-100 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center text-gray-300">...</div>
+                </div>
+
+                <!-- Content Card (Montagnes/Images) -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="h-48 bg-blue-50 rounded-[30px] flex items-center justify-center text-blue-300 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="h-48 bg-yellow-50 rounded-[30px] flex items-center justify-center text-yellow-300 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400" class="w-full h-full object-cover" />
+                    </div>
+                </div>
+
+                <!-- Reaction Floating (le bouton Woow!! de l'image) -->
+                <div class="absolute -bottom-6 -right-6 bg-[#ff6b81] text-white px-6 py-3 rounded-full font-bold shadow-xl shadow-red-200 flex items-center gap-2 animate-bounce">
+                    🔥 Woow!!
+                </div>
+                
+                <!-- Sidebar miniature teaser -->
+                <div class="mt-4 flex gap-3 opacity-40">
+                    <div class="h-8 w-8 bg-black rounded-lg"></div>
+                    <div class="h-8 w-24 bg-gray-100 rounded-lg"></div>
+                </div>
+            </div>
+
+            <!-- Petites suggestions flottantes -->
+            <div class="absolute -left-10 top-1/2 bg-white p-4 rounded-[25px] shadow-lg flex items-center gap-3 border border-gray-50 animate-scale delay-500">
+                <div class="w-8 h-8 bg-purple-100 rounded-full"></div>
+                <div class="h-2 w-16 bg-gray-200 rounded-full"></div>
+            </div>
         </div>
+    </main>
 
-        <!-- Email -->
-        <div>
-            <label>Email :</label>
-            <input type="email" name="email">
-            @error('email')
-                <div style="color:red">{{ $message }}</div>
-            @enderror
+    <!-- Section Features (Bas de page) -->
+    <section class="max-w-7xl mx-auto px-10 py-24">
+        <div class="grid md:grid-cols-3 gap-12">
+            <div class="p-8 bg-white/50 rounded-custom border border-white/80 hover:bg-white transition">
+                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6">🔍</div>
+                <h3 class="text-xl font-bold mb-4">Recherche Intelligente</h3>
+                <p class="text-gray-500">Trouvez vos amis en un clic grâce à notre système de recherche par pseudo unique ou email.</p>
+            </div>
+            <div class="p-8 bg-white/50 rounded-custom border border-white/80 hover:bg-white transition">
+                <div class="w-14 h-14 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-2xl mb-6">👤</div>
+                <h3 class="text-xl font-bold mb-4">Profil Sur-Mesure</h3>
+                <p class="text-gray-500">Personnalisez votre bio, votre photo de profil et vos informations pour briller dans la communauté.</p>
+            </div>
+            <div class="p-8 bg-white/50 rounded-custom border border-white/80 hover:bg-white transition">
+                <div class="w-14 h-14 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-2xl mb-6">🔒</div>
+                <h3 class="text-xl font-bold mb-4">Espace Sécurisé</h3>
+                <p class="text-gray-500">Une authentification robuste développée nativement pour protéger vos données les plus précieuses.</p>
+            </div>
         </div>
+    </section>
 
-        <!-- Password -->
-        <div>
-            <label>Mot de passe :</label>
-            <input type="password" name="password">
-            @error('password')
-                <div style="color:red">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- Confirm Password -->
-        <div>
-            <label>Confirmer mot de passe :</label>
-            <input type="password" name="password_confirmation">
-        </div>
-
-        <!-- Role -->
-        <div>
-            <label>Rôle :</label>
-            <select name="role">
-                <option value="">-- Choisir --</option>
-                <option value="admin">Admin</option>
-                <option value="student">Student</option>
-                <option value="parent">Parent</option>
-                <option value="teacher">Teacher</option>
-            </select>
-            @error('role')
-                <div style="color:red">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <br>
-
-        <button type="submit" class="p-2 border border-2">Envoyer</button>
-    </form>
-
-    <h2>Résultat</h2>
-    <form action="{{ route('users.index') }}" method="GET">
-        <button type="submit" class="p-2 border border-2">afficher les utilisateurs</button>
-    </form>
-
-    {{-- Message de succès --}}
-    @if(session('success'))
-        <div style="color: green; font-weight: bold;">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <br>
-
-    {{-- Affichage du user --}}
-    @if(session('user'))
-        <div style="border:1px solid #ccc; padding:10px; width:300px;">
-            <p><strong>Nom :</strong> {{ session('user')->nom }}</p>
-            <p><strong>Prénom :</strong> {{ session('user')->prenom }}</p>
-            <p><strong>Email :</strong> {{ session('user')->email }}</p>
-            <p><strong>Rôle :</strong> {{ session('user')->role }}</p>
-        </div>
-    @endif
-
-    {{-- Affichage des users --}}
-    @if(isset($users))
-        @if($users->count())
-            @foreach($users as $user)
-
-                <form action="{{ route('user.status', $user->id) }}" method="GET">
-                    <button type="submit" class="p-2 border border-2"> {{ $user->status}}</button>
-                </form>
-
-                <form action="{{ route('user.delete', $user->id) }}" method="GET">
-                    <button type="submit" class="p-2 border border-2">supprime</button>
-                </form>
-
-                <form action="{{ route('user.update', $user->id) }}" method="POST" class="flex flex-col" style="border:1px solid #ccc; padding:10px; width:300px;">
-
-                    @csrf
-                    @method ('PUT')
-
-                    <label for="nom">Nom</label>
-                    <input type="text" name="nom" value="{{ $user->nom }}">
-
-                    <label for="prenom">Prénom</label>
-                    <input type="text" name="prenom" value="{{ $user->prenom }}">
-
-                    <label for="email">Email</label>
-                    <input type="text" name="email" value="{{ $user->email }}">
-
-                    <label>Rôle :</label>
-                    <select name="role">
-                        <option value="{{ $user->role }}">{{ $user->role }}</option>
-                        <option value="admin">Admin</option>
-                        <option value="student">Student</option>
-                        <option value="parent">Parent</option>
-                        <option value="teacher">Teacher</option>
-                    </select>
-
-                    <input type="password" name="password">
-                    <input type="password" name="password_confirmation">
-
-                    <button type="submit" class="p-2 border border-2"> update</button>
-                </form>
-            @endforeach
-        @else
-            <p>Aucun utilisateur trouvé.</p>
-        @endif
-    @endif
-
-    <div class="container mx-auto px-4">
-        <h1 class="text-2xl font-bold mb-4">Liste de recherche</h1>
-        <form action="{{ route('users.search') }}" method="GET">
-            <input type="text" name="nom" >
-            <button type="submit" class="p-2 border border-2">results de recherche</button>
-        </form>
-
-        @if(!isset($usersByName))
-            <p>Aucun utilisateur trouvé.</p>
-        @else
-            <table class="min-w-full bg-white border border-gray-200">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="py-2 px-4 border-b">ID</th>
-                        <th class="py-2 px-4 border-b">Nom</th>
-                        <th class="py-2 px-4 border-b">Prenom</th>
-                        <th class="py-2 px-4 border-b">Email</th>
-                        <th class="py-2 px-4 border-b">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($usersByName as $user)
-                    <tr>
-                        <td class="py-2 px-4 border-b">{{ $user->id }}</td>
-                        <td class="py-2 px-4 border-b">{{ $user->nom }}</td>
-                        <td class="py-2 px-4 border-b">{{ $user->prenom }}</td>
-                        <td class="py-2 px-4 border-b">{{ $user->email }}</td>
-                        <td class="py-2 px-4 border-b">{{ $user->status }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @endif
-    </div>
+    <footer class="text-center py-10 text-gray-400 font-medium">
+        &copy; {{ date('Y') }} LINKUP STARTUP • Design Moderne & Propre
+    </footer>
 
 </body>
 </html>

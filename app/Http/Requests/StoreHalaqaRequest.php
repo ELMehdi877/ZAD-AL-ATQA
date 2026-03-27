@@ -20,11 +20,12 @@ class StoreHalaqaRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
-        return [
-            'nom_halaqa' => 'required|string|min:5|max:50',
-            'capacite' => 'required|integer'
-        ];
-    }
+        public function rules(): array
+        {
+            return [
+                'nom_halaqa' => 'required|string|min:5|max:50',
+                'capacite' => 'required|integer',
+                'cheikh_id' => 'required|integer|exists:users,id',
+            ];
+        }
 }

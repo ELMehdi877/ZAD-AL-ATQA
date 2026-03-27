@@ -10,8 +10,14 @@ class Halaqa extends Model
     /** @use HasFactory<\Database\Factories\HalaqaFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'nom_halaqa',
+        'capacite',
+        'cheikh_id'
+    ];
+
     public function cheikh()
     {
-        return $this->belongsTo(User::class, 'cheuck_id');
+        return $this->belongsTo(User::class, 'cheikh_id');
     }
 }
