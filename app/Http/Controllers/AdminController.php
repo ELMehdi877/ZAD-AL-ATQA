@@ -8,6 +8,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -85,10 +86,13 @@ class AdminController extends Controller
     //Affiche tous les utilisateurs
     public function getAllUsers()
     {
-        $users = User::all();
-        return back()->with([
-            'users' => $users
-        ]);
+        // $users = User::all();
+        // return back()->with([
+        //     'users' => $users
+        // ]);
+
+        $users = User::orderBy('id', 'asc')->get();
+        return view('welcome', compact('users'));
     }
 
     //Modifie les infos d'un utilisateur
@@ -107,7 +111,7 @@ class AdminController extends Controller
                 ->with('success', 'update valider user '. $user->nom);
     }
 
-    //Bloquer un user
+    //Bloquer ou Débloquer un utilisateur
     public function statusUser(int $id)
     {
         $user = User::findOrfail($id);
@@ -129,6 +133,27 @@ class AdminController extends Controller
             ->with('success', 'status update');
     }
 
+    //Supprimer un compte
+    public function deleteUser(int $id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return redirect()->route('users.index')
+            ->with('success', 'delete user '.$user->nom);
+    }
+
+    public function searchUserByName(Request $request)
+    {
+        $request->validate([
+            'nom' => 'required|string'
+        ]);
+        
+        $usersByName = User::where('nom', 'like', '%' . $request->nom . '%')->get();
+
+        return view('welcome', compact('usersByName'));
+    }
 
 }
 

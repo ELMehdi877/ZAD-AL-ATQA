@@ -10,13 +10,16 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class AuthController extends Controller
 {
-    
+    public function showLogin()
+    {
+        return view('login');
+    }
 
     public function login(Request $request)
     {
         $data = $request->validate([
             'email' => 'required|email|exists:users,email',
-            'password' => 'required|'
+            'password' => 'required'
         ]);
 
         if (Auth::attempt($data)) {
@@ -28,10 +31,10 @@ class AuthController extends Controller
     public function redirectByrole(string $role)
     {
         return match($role){
-            'admin' => redirect()->route('admin.dashboard'),
-            'teacher' => redirect()->route('teacher.dashboard'),
-            'parent' => redirect()->route('parent.dashboard'),
-            'student' => redirect()->route('student.dashboard')
+            // 'admin' => redirect()->route('admin.dashboard'),
+            'teacher' => redirect()->route('users.index'),
+            // 'parent' => redirect()->route('parent.dashboard'),
+            // 'student' => redirect()->route('student.dashboard')
         };
     }
 
@@ -39,9 +42,9 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        $request->invalidate();
-        $request->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }
