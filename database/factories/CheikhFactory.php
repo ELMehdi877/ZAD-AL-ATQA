@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Enseignant;
+use App\Models\Cheikh;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<Enseignant>
  */
-class EnseignantFactory extends Factory
+class CheikhFactory extends Factory
 {
     /**
      * Define the model's default state.

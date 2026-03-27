@@ -9,4 +9,9 @@ class Halaqa extends Model
 {
     /** @use HasFactory<\Database\Factories\HalaqaFactory> */
     use HasFactory;
+
+    public function cheikh()
+    {
+        return $this->belongsTo(User::class, 'cheuck_id');
+    }
 }

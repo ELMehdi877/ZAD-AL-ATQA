@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('halaqas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('enseignant_id')->constrained('users');
-            $table->string('nom');
+            $table->foreignId('cheikh_id')->constrained('users');
+            $table->string('nom_halaqa');
             $table->integer('capacite')->unsigned();
             $table->timestamps();
         });

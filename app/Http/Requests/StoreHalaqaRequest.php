@@ -12,7 +12,7 @@ class StoreHalaqaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,8 @@ class StoreHalaqaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nom_halaqa' => 'required|string|min:5|max:50',
+            'capacite' => 'required|integer'
         ];
     }
 }
