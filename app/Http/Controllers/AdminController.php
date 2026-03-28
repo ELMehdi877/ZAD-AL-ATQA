@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
-use App\Http\Requests\StoreAdminRequest;
 use App\Http\Requests\StoreHalaqaRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateAdminRequest;
@@ -61,18 +59,6 @@ class AdminController extends Controller
 
         return redirect()->route('users.index')
                 ->with('success', 'Nouveau user '.$user->nom.' créé !');
-    }
-
-    //Affiche tous les utilisateurs
-    public function getAllUsers()
-    {
-        // $users = User::all();
-        // return back()->with([
-        //     'users' => $users
-        // ]);
-
-        $users = User::orderBy('id', 'asc')->get();
-        return view('welcome', compact('users'));
     }
 
     //Modifie les infos d'un utilisateur
