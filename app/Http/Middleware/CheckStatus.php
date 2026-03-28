@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckAuth
+class CheckStatus
 {
     /**
      * Handle an incoming request.
@@ -16,9 +16,9 @@ class CheckAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
+        // if (!Auth::check()) {
+        //     return redirect()->route('login');
+        // }
 
         if (Auth::user()->status === 'inactive') {
             Auth::logout();
@@ -26,8 +26,8 @@ class CheckAuth
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             
-            return redirect()->route('user.login')
-                ->with('error', 'Votre est bloqué');
+            return redirect()->route('login')
+                ->with('error', 'Votre compte est bloqué');
         }
         return $next($request);
     }

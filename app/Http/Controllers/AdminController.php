@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+    /**
+    * Display the admin dashboard.
+    */
     public function dashboard()
     {
         $usersCount = User::count();
@@ -21,34 +24,27 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact('usersCount', 'activeUsersCount', 'halaqasCount'));
     }
-
-    public function createUserPage()
-    {
-        return view('admin.users.create');
-    }
-
-    public function editUserPage(User $user)
-    {
-        return view('admin.users.edit', compact('user'));
-    }
-
-    public function createHalaqaPage()
-    {
-        $users = User::orderBy('id', 'asc')->get();
-
-        return view('admin.halaqas.create', compact('users'));
-    }
-
+    
     /**
      * Display a listing of the resource.
-     */
+    */
     public function index()
     {
         $users = User::orderBy('id', 'asc')->get();
         return view('admin.users.index', compact('users'));
     }
+        
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function createUserPage()
+    {
+        return view('admin.users.create');
+    }
 
-    //Fonction pour cree un compte d'un utilisateur
+    /**
+     * Store a newly created resource in storage.
+     */
     public function storeUser(StoreUserRequest $request)
     {
         $data = $request->validated();
@@ -61,7 +57,17 @@ class AdminController extends Controller
                 ->with('success', 'Nouveau user '.$user->nom.' créé !');
     }
 
-    //Modifie les infos d'un utilisateur
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function editUserPage(User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
     public function updateUser(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
@@ -70,14 +76,32 @@ class AdminController extends Controller
         if (empty($data['password'])) {
             unset($data['password']);
         }
-
+        else {
+            $data['password'] = Hash::make($data['password']);
+        }
+        
         $user->update($data);
 
         return redirect()->route('users.index')
                 ->with('success', 'update valider user '. $user->nom);
     }
 
-    //Bloquer ou Débloquer un utilisateur
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function deleteUser(int $id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return redirect()->route('users.index')
+            ->with('success', 'delete user '.$user->nom);
+    }
+
+    /**
+     * Update the status of the specified resource in storage.
+     */
     public function statusUser(int $id)
     {
         $user = User::findOrfail($id);
@@ -99,18 +123,9 @@ class AdminController extends Controller
             ->with('success', 'status update');
     }
 
-    //Supprimer un compte
-    public function deleteUser(int $id)
-    {
-        $user = User::findOrFail($id);
-
-        $user->delete();
-
-        return redirect()->route('users.index')
-            ->with('success', 'delete user '.$user->nom);
-    }
-
-    //Chercher un utilisateur par son nom
+    /**
+     * Search for users by name.
+     */
     public function searchUserByName(Request $request)
     {
         $request->validate([
@@ -124,15 +139,7 @@ class AdminController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
-    //Cree une Halaqa
-    public function storeHalaqa(StoreHalaqaRequest $request)
-    {
-        $data = $request->validated();
-        $halaqa = Halaqa::create($data);
-
-        return redirect()->route('halaqas.index')
-            ->with('success', 'Nouveau Halaqa '.$halaqa->nom_halaqa.' créé !');
-    }
+    
 
 
 }

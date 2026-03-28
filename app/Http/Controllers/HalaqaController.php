@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Halaqa;
 use App\Http\Requests\StoreHalaqaRequest;
 use App\Http\Requests\UpdateHalaqaRequest;
+use App\Models\User;
 
 class HalaqaController extends Controller
 {
@@ -21,9 +22,12 @@ class HalaqaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createHalaqaPage()
     {
-        //
+        $users = User::where('role', 'cheikh')
+        ->orderBy('id', 'asc')->get();
+
+        return view('admin.halaqas.create', compact('users'));
     }
 
     /**
@@ -31,7 +35,11 @@ class HalaqaController extends Controller
      */
     public function store(StoreHalaqaRequest $request)
     {
-        //
+        $data = $request->validated();
+        $halaqa = Halaqa::create($data);
+
+        return redirect()->route('halaqas.index')
+            ->with('success', 'Nouveau Halaqa '.$halaqa->nom_halaqa.' créé !');
     }
 
     /**
@@ -39,7 +47,7 @@ class HalaqaController extends Controller
      */
     public function show(Halaqa $halaqa)
     {
-        //
+        // return view('admin.halaqas.show', compact('halaqa'));
     }
 
     /**
@@ -47,7 +55,11 @@ class HalaqaController extends Controller
      */
     public function edit(Halaqa $halaqa)
     {
-        //
+        $users = User::where('role', 'cheikh')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        return view('admin.halaqas.edit', compact('halaqa', 'users'));
     }
 
     /**
@@ -55,7 +67,11 @@ class HalaqaController extends Controller
      */
     public function update(UpdateHalaqaRequest $request, Halaqa $halaqa)
     {
-        //
+        $data = $request->validated();
+        $halaqa->update($data);
+
+        return redirect()->route('halaqas.index')
+            ->with('success', 'Halaqa '.$halaqa->nom_halaqa.' modifié !');
     }
 
     /**
@@ -63,6 +79,11 @@ class HalaqaController extends Controller
      */
     public function destroy(Halaqa $halaqa)
     {
-        //
+        $halaqa->delete();
+
+        return redirect()->route('halaqas.index')
+            ->with('success', 'Halaqa '.$halaqa->nom_halaqa.' supprimé !');
     }
+
+    
 }

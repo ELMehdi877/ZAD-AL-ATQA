@@ -3,7 +3,6 @@
 @section('title', 'Modifier Utilisateur')
 
 @section('content')
-
     <div class="mb-6 flex items-center justify-between">
         <div>
             <h2 class="text-2xl font-bold">Modifier utilisateur #{{ $user->id }}</h2>
