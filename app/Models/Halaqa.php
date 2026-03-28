@@ -20,4 +20,9 @@ class Halaqa extends Model
     {
         return $this->belongsTo(User::class, 'cheikh_id');
     }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'memberships', 'halaqa_id', 'student_id');
+    }
 }

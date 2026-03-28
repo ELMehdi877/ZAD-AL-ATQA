@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('participations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('etudiant_id')->constrained('etudiants');
+            $table->foreignId('student_id')->constrained('students');
             $table->foreignId('competition_id')->constrained('competitions');
-            $table->unique(['etudiant_id', 'competition_id']);
+            $table->unique(['student_id', 'competition_id']);
             $table->enum('statut',['en_attente', 'accepte', 'refuse', 'valide']);
             $table->timestamps();
         });

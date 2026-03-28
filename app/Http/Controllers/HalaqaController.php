@@ -24,10 +24,13 @@ class HalaqaController extends Controller
      */
     public function createHalaqaPage()
     {
-        $users = User::where('role', 'cheikh')
+        $cheikhs = User::where('role', 'cheikh')
         ->orderBy('id', 'asc')->get();
 
-        return view('admin.halaqas.create', compact('users'));
+        $students = User::where('role', 'student')
+        ->orderBy('id', 'asc')->get();
+
+        return view('admin.halaqas.create', compact('cheikhs', 'students'));
     }
 
     /**
@@ -38,8 +41,10 @@ class HalaqaController extends Controller
         $data = $request->validated();
         $halaqa = Halaqa::create($data);
 
+        $halaqa->students()->attach($data['students'] ?? []);
+
         return redirect()->route('halaqas.index')
-            ->with('success', 'Nouveau Halaqa '.$halaqa->nom_halaqa.' créé !');
+            ->with('success', 'Nouvelle Halaqa '.$halaqa->nom_halaqa.' créé !');
     }
 
     /**

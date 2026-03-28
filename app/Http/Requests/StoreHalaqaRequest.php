@@ -26,6 +26,9 @@ class StoreHalaqaRequest extends FormRequest
                 'nom_halaqa' => 'required|string|min:5|max:50',
                 'capacite' => 'required|integer',
                 'cheikh_id' => 'required|exists:users,id',
+                'students' => 'nullable|array',
+                'students.*' => 'exists:users,id',
+                
             ];
         }
 }
