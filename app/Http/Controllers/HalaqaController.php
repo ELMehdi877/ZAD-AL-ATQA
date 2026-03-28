@@ -13,7 +13,9 @@ class HalaqaController extends Controller
      */
     public function index()
     {
-        //
+        $halaqas = Halaqa::orderBy('id', 'asc')->get();
+        return view('admin.halaqas.index', compact('halaqas'));
+        
     }
 
     /**

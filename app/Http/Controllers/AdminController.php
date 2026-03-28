@@ -15,13 +15,39 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+    public function dashboard()
+    {
+        $usersCount = User::count();
+        $activeUsersCount = User::where('status', 'active')->count();
+        $halaqasCount = Halaqa::count();
+
+        return view('admin.dashboard', compact('usersCount', 'activeUsersCount', 'halaqasCount'));
+    }
+
+    public function createUserPage()
+    {
+        return view('admin.users.create');
+    }
+
+    public function editUserPage(User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    public function createHalaqaPage()
+    {
+        $users = User::orderBy('id', 'asc')->get();
+
+        return view('admin.halaqas.create', compact('users'));
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $users = User::orderBy('id', 'asc')->get();
-        return view('welcome', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
 
     //Fonction pour cree un compte d'un utilisateur
@@ -105,18 +131,21 @@ class AdminController extends Controller
             'nom' => 'required|string'
         ]);
         
-        $usersByName = User::where('nom', 'like', '%' . $request->nom . '%')->get();
+        $users = User::where('nom', 'like', '%' . $request->nom . '%')
+            ->orderBy('id', 'asc')
+            ->get();
 
-        return view('welcome', compact('usersByName'));
+        return view('admin.users.index', compact('users'));
     }
 
     //Cree une Halaqa
     public function storeHalaqa(StoreHalaqaRequest $request)
     {
         $data = $request->validated();
-        $halaqa = Halaqa::create($data)->attach();
+        $halaqa = Halaqa::create($data);
 
-        return ;
+        return redirect()->route('halaqas.index')
+            ->with('success', 'Nouveau Halaqa '.$halaqa->nom_halaqa.' créé !');
     }
 
 

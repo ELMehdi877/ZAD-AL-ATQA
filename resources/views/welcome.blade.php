@@ -156,6 +156,7 @@
             </div>
         </div>
     </section>
+    
 
     <footer class="text-center py-10 text-gray-400 font-medium">
         &copy; {{ date('Y') }} LINKUP STARTUP • Design Moderne & Propre

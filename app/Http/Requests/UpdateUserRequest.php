@@ -35,7 +35,7 @@ class UpdateUserRequest extends FormRequest
                 Rule::unique('users', 'email')->ignore($userId),
             ],
             'password' => 'nullable|confirmed|min:8', // nullable si pas de changement
-            'role' => 'required|in:admin,student,parent,teacher',
+            'role' => 'required|in:admin,student,parent,teacher,cheikh',
         ];
     }
 }

@@ -27,7 +27,7 @@ class StoreUserRequest extends FormRequest
             'prenom' => 'required|string|min:3|max:20',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed|min:8',
-            'role' => 'required|in:admin,student,parent,teacher',
+            'role' => 'required|in:admin,student,parent,teacher,cheikh',
         ];
     }
 
