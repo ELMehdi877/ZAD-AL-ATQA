@@ -19,6 +19,7 @@
                     <th class="px-3 py-2">ID</th>
                     <th class="px-3 py-2">Nom halaqa</th>
                     <th class="px-3 py-2">Capacite</th>
+                    <th class="px-3 py-2">Nombre d'etudiants</th>
                     <th class="px-3 py-2">Cheikh ID</th>
                     <th class="px-3 py-2">Actions</th>
                 </tr>
@@ -29,6 +30,7 @@
                         <td class="px-3 py-2">{{ $halaqa->id }}</td>
                         <td class="px-3 py-2">{{ $halaqa->nom_halaqa }}</td>
                         <td class="px-3 py-2">{{ $halaqa->capacite }}</td>
+                        <td class="px-3 py-2">{{ $halaqa->students->count() }}</td>
                         <td class="px-3 py-2">{{ $halaqa->cheikh_id }}</td>
                         <td class="px-3 py-2">
                             <div class="flex flex-wrap gap-2">

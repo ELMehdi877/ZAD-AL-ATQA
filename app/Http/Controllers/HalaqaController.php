@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Halaqa;
 use App\Http\Requests\StoreHalaqaRequest;
 use App\Http\Requests\UpdateHalaqaRequest;
+use App\Models\Membership;
+use App\Models\Student;
 use App\Models\User;
 
 class HalaqaController extends Controller
@@ -14,9 +16,9 @@ class HalaqaController extends Controller
      */
     public function index()
     {
-        $halaqas = Halaqa::orderBy('id', 'asc')->get();
+        $halaqas = Halaqa::with('students')->orderBy('id', 'asc')->get();
+
         return view('admin.halaqas.index', compact('halaqas'));
-        
     }
 
     /**
@@ -25,10 +27,15 @@ class HalaqaController extends Controller
     public function createHalaqaPage()
     {
         $cheikhs = User::where('role', 'cheikh')
-        ->orderBy('id', 'asc')->get();
+            ->orderBy('id', 'asc')
+            ->get();
 
-        $students = User::where('role', 'student')
-        ->orderBy('id', 'asc')->get();
+        $students = Student::with('user')
+            ->whereDoesntHave('halaqas', function ($query) {
+                $query->where('memberships.status', 'active');
+            })
+            ->orderBy('id', 'asc')
+            ->get();
 
         return view('admin.halaqas.create', compact('cheikhs', 'students'));
     }
@@ -39,12 +46,13 @@ class HalaqaController extends Controller
     public function store(StoreHalaqaRequest $request)
     {
         $data = $request->validated();
+
         $halaqa = Halaqa::create($data);
 
         $halaqa->students()->attach($data['students'] ?? []);
 
         return redirect()->route('halaqas.index')
-            ->with('success', 'Nouvelle Halaqa '.$halaqa->nom_halaqa.' créé !');
+            ->with('success', 'Nouvelle Halaqa ' . $halaqa->nom_halaqa . ' créé !');
     }
 
     /**
@@ -60,11 +68,24 @@ class HalaqaController extends Controller
      */
     public function edit(Halaqa $halaqa)
     {
-        $users = User::where('role', 'cheikh')
+        $cheikhs = User::where('role', 'cheikh')
             ->orderBy('id', 'asc')
             ->get();
 
-        return view('admin.halaqas.edit', compact('halaqa', 'users'));
+        $students = Membership::with('student.user')
+            ->where('halaqa_id', $halaqa->id)
+            ->get()
+            ->pluck('student');
+
+        $studentsNotInHalaqa = Student::with('user')
+            ->whereDoesntHave('halaqas', function($query){
+                $query->where('memberships.status', 'active');
+            })
+            ->orderBy('id', 'asc')
+            ->get();
+
+
+        return view('admin.halaqas.edit', compact('halaqa', 'cheikhs', 'students', 'studentsNotInHalaqa'));
     }
 
     /**
@@ -74,9 +95,10 @@ class HalaqaController extends Controller
     {
         $data = $request->validated();
         $halaqa->update($data);
+        $halaqa->students()->sync($data['students'] ?? []);
 
         return redirect()->route('halaqas.index')
-            ->with('success', 'Halaqa '.$halaqa->nom_halaqa.' modifié !');
+            ->with('success', 'Halaqa ' . $halaqa->nom_halaqa . ' modifié !');
     }
 
     /**
@@ -84,11 +106,14 @@ class HalaqaController extends Controller
      */
     public function destroy(Halaqa $halaqa)
     {
-        $halaqa->delete();
+        try {
+            $halaqa->delete();
+        } catch (\Exception $e) {
+            return redirect()->route('halaqas.index')
+                ->with('error', 'Impossible de supprimer la Halaqa ' . $halaqa->nom_halaqa . ' car elle a des étudiants associés.');
+        }
 
         return redirect()->route('halaqas.index')
-            ->with('success', 'Halaqa '.$halaqa->nom_halaqa.' supprimé !');
+            ->with('success', 'Halaqa ' . $halaqa->nom_halaqa . ' supprimé !');
     }
-
-    
 }

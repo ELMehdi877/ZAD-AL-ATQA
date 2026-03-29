@@ -9,4 +9,20 @@ class Membership extends Model
 {
     /** @use HasFactory<\Database\Factories\MembershipFactory> */
     use HasFactory;
+    protected $fillable = [
+        'student_id',
+        'halaqa_id',
+        'status',
+    ];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function halaqa()
+    {
+        return $this->belongsTo(Halaqa::class);
+    }
+
 }

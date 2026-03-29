@@ -47,7 +47,7 @@
                     @forelse ($students as $student)
                         <label class="flex items-center p-2 hover:bg-emerald-50 rounded cursor-pointer">
                             <input type="checkbox" name="students[]" value="{{ $student->id }}" class="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500">
-                            <span class="ml-3 text-sm font-medium text-slate-700">{{ $student->nom }} {{ $student->prenom }}</span>
+                            <span class="ml-3 text-sm font-medium text-slate-700">{{ $student->user->nom }} {{ $student->user->prenom }}</span>
                         </label>
                     @empty
                         <p class="text-sm text-slate-500 p-2">Aucun étudiant disponible.</p>

@@ -12,7 +12,7 @@ class UpdateCompetitionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,10 @@ class UpdateCompetitionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'titre' => 'required|string|min:5|max:100|unique:competitions,titre,' . $this->route('competition')->id,
+            'description' => 'nullable|text|max:1000',
+            'date_debut' => 'required|date|after_or_equal:today',
+            'date_fin' => 'required|date|after_or_equal:date_debut',
         ];
     }
 }

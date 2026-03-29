@@ -70,6 +70,13 @@ Route::middleware(['auth', 'check.status'])->group(function () {
 
         //Afficher tous les Halaqas
         Route::get('/halaqas', [HalaqaController::class, 'index'])->name('halaqas.index');
+
+        /*
+            * Routes pour la gestion des Competitions
+         */
+
+        
+        
 });
 
 require __DIR__.'/auth.php';

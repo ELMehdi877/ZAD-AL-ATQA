@@ -53,6 +53,10 @@ class AdminController extends Controller
 
         $user = User::create($data);
 
+        if ($user->role === 'student') {
+            $user->student()->create();
+        }
+
         return redirect()->route('users.index')
                 ->with('success', 'Nouveau user '.$user->nom.' créé !');
     }

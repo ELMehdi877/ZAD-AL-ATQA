@@ -30,7 +30,7 @@
                 <label class="mb-1 block text-sm font-medium" for="cheikh_id">Cheikh</label>
                 <select id="cheikh_id" name="cheikh_id" required class="w-full rounded-lg border border-slate-300 px-3 py-2">
                     <option value="">-- choisir --</option>
-                    @forelse ($users as $u)
+                    @forelse ($cheikhs as $u)
                         <option value="{{ $u->id }}" @selected(old('cheikh_id', $halaqa->cheikh_id) == $u->id)>
                             #{{ $u->id }} - {{ $u->nom }} {{ $u->prenom }}
                         </option>
@@ -38,6 +38,31 @@
                         <option value="" disabled>Aucun cheikh disponible</option>
                     @endforelse
                 </select>
+            </div>
+
+            <div class="sm:col-span-2 mt-2">
+                <label class="mb-1 block text-sm font-medium text-slate-700">Ajouter des Étudiants</label>
+                @php
+                    $selectedStudentIds = collect(old('students', $students->pluck('id')->toArray()))
+                        ->map(fn ($id) => (int) $id)
+                        ->all();
+
+                    $allStudents = $students
+                        ->merge($studentsNotInHalaqa)
+                        ->unique('id')
+                        ->sortBy('id');
+                @endphp
+                
+                <div class="h-48 overflow-y-auto border border-slate-300 rounded-lg p-3 bg-slate-50">
+                    @forelse ($allStudents as $student)
+                        <label class="flex items-center p-2 hover:bg-emerald-50 rounded cursor-pointer">
+                            <input type="checkbox" name="students[]" value="{{ $student->id }}" @checked(in_array($student->id, $selectedStudentIds)) class="w-4 h-4 text-emerald-600 border-slate-300 rounded focus:ring-emerald-500">
+                            <span class="ml-3 text-sm font-medium text-slate-700">{{ $student->user->nom }} {{ $student->user->prenom }}</span>
+                        </label>
+                    @empty
+                        <p class="text-sm text-slate-500 p-2">Aucun étudiant disponible.</p>
+                    @endforelse
+                </div>
             </div>
 
             <div class="sm:col-span-2">

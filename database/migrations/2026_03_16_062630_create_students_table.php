@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete(); // lien avec users
-            $table->foreignId('parent_id')->constrained('users'); // parent est aussi un user
-            $table->integer('nombre_hifz');
+            $table->foreignId('parent_id')->nullable()->constrained('users')->nullOnDelete(); // parent est aussi un user
+            $table->integer('nombre_hifz')->nullable(); // nombre de hifz mémorisés
             $table->timestamps();
         });
     }

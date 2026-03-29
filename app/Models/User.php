@@ -50,4 +50,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function halaqas()
+    {
+        return $this->hasMany(Halaqa::class, 'cheikh_id');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
 }

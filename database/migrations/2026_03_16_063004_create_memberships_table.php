@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users');
             $table->foreignId('halaqa_id')->constrained('halaqas');
             $table->unique(['student_id', 'halaqa_id']);
-            $table->enum('statut', ['active', 'inactive'])->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

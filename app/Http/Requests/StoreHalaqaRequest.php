@@ -23,11 +23,11 @@ class StoreHalaqaRequest extends FormRequest
         public function rules(): array
         {
             return [
-                'nom_halaqa' => 'required|string|min:5|max:50',
+                'nom_halaqa' => 'required|string|min:5|max:50|unique:halaqas,nom_halaqa',
                 'capacite' => 'required|integer',
                 'cheikh_id' => 'required|exists:users,id',
                 'students' => 'nullable|array',
-                'students.*' => 'exists:users,id',
+                'students.*' => 'exists:students,id',
                 
             ];
         }

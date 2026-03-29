@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Competition;
 use App\Http\Requests\StoreCompetitionRequest;
 use App\Http\Requests\UpdateCompetitionRequest;
+use App\Models\Student;
 
 class CompetitionController extends Controller
 {
@@ -13,7 +14,9 @@ class CompetitionController extends Controller
      */
     public function index()
     {
-        //
+        $competitions = Competition::orderBy('id', 'asc')->get();
+
+        return view('admin.competitions.index', compact('competitions'));
     }
 
     /**
@@ -21,7 +24,10 @@ class CompetitionController extends Controller
      */
     public function create()
     {
-        //
+        $students = Student::with('user')
+            ->orderBy('id', 'asc')
+            ->get();
+        return view('admin.competitions.create', compact('students'));
     }
 
     /**
@@ -29,7 +35,16 @@ class CompetitionController extends Controller
      */
     public function store(StoreCompetitionRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $competition = Competition::create($data);
+
+        if (!empty($data['students'])) {
+            $competition->students()->attach($data['students'], ['status' => 'valide']);
+        }
+        
+        return redirect()->route('competitions.index')
+            ->with('success', 'Nouvelle compétition ' . $competition->titre . ' créée !');
     }
 
     /**
@@ -37,7 +52,7 @@ class CompetitionController extends Controller
      */
     public function show(Competition $competition)
     {
-        //
+        return view('admin.competitions.show', compact('competition'));
     }
 
     /**
@@ -45,7 +60,11 @@ class CompetitionController extends Controller
      */
     public function edit(Competition $competition)
     {
-        //
+        $students = Student::with('user')
+            ->whereDoesntHave('')
+            ->orderBy('id', 'asc')
+            ->get();
+        return view('admin.competitions.edit', compact('competition'));
     }
 
     /**
@@ -53,7 +72,11 @@ class CompetitionController extends Controller
      */
     public function update(UpdateCompetitionRequest $request, Competition $competition)
     {
-        //
+        $data = $request->validated();
+        $competition->update($data);
+
+        return redirect()->route('competitions.index')
+            ->with('success', 'Compétition ' . $competition->titre . ' modifiée !');
     }
 
     /**
@@ -61,6 +84,9 @@ class CompetitionController extends Controller
      */
     public function destroy(Competition $competition)
     {
-        //
+        $competition->delete();
+
+        return redirect()->route('competitions.index')
+            ->with('success', 'Compétition ' . $competition->titre . ' supprimée !');
     }
 }
