@@ -20,6 +20,8 @@
                 <a href="{{ route('users.create') }}" class="block rounded-lg px-3 py-2 text-sm hover:bg-slate-800">Nouveau utilisateur</a>
                 <a href="{{ route('halaqas.index') }}" class="block rounded-lg px-3 py-2 text-sm hover:bg-slate-800">Halaqas</a>
                 <a href="{{ route('halaqas.create') }}" class="block rounded-lg px-3 py-2 text-sm hover:bg-slate-800">Nouvelle halaqa</a>
+                <a href="{{ route('competitions.index') }}" class="block rounded-lg px-3 py-2 text-sm hover:bg-slate-800">Competitions</a>
+                <a href="{{ route('competitions.create') }}" class="block rounded-lg px-3 py-2 text-sm hover:bg-slate-800">Nouvelle competition</a>
             </nav>
 
             <div class="mt-auto border-t border-slate-800 px-3 py-4">

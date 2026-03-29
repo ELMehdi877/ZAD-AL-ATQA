@@ -84,7 +84,6 @@ class HalaqaController extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
-
         return view('admin.halaqas.edit', compact('halaqa', 'cheikhs', 'students', 'studentsNotInHalaqa'));
     }
 

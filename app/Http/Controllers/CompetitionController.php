@@ -25,6 +25,9 @@ class CompetitionController extends Controller
     public function create()
     {
         $students = Student::with('user')
+            ->whereDoesntHave('competitions', function ($query) {
+                $query->where('participations.statut', 'valide');
+            })
             ->orderBy('id', 'asc')
             ->get();
         return view('admin.competitions.create', compact('students'));
@@ -40,7 +43,7 @@ class CompetitionController extends Controller
         $competition = Competition::create($data);
 
         if (!empty($data['students'])) {
-            $competition->students()->attach($data['students'], ['status' => 'valide']);
+            $competition->students()->attach($data['students'], ['statut' => 'valide']);
         }
         
         return redirect()->route('competitions.index')
@@ -52,6 +55,8 @@ class CompetitionController extends Controller
      */
     public function show(Competition $competition)
     {
+        $competition->load('students.user');
+
         return view('admin.competitions.show', compact('competition'));
     }
 
@@ -61,10 +66,20 @@ class CompetitionController extends Controller
     public function edit(Competition $competition)
     {
         $students = Student::with('user')
-            ->whereDoesntHave('')
+            ->whereHas('competitions', function ($query) use ($competition) {
+                $query->where('participations.competition_id', $competition->id);
+            })
             ->orderBy('id', 'asc')
             ->get();
-        return view('admin.competitions.edit', compact('competition'));
+
+        $studentsNotInCompetition = Student::with('user')
+            ->whereDoesntHave('competitions', function ($query) use ($competition) {
+                $query->where('participations.competition_id', $competition->id);
+            })
+            ->orderBy('id', 'asc')
+            ->get();
+        
+        return view('admin.competitions.edit', compact('competition', 'students', 'studentsNotInCompetition'));
     }
 
     /**
@@ -74,6 +89,7 @@ class CompetitionController extends Controller
     {
         $data = $request->validated();
         $competition->update($data);
+        $competition->students()->syncWithPivotValues($data['students'] ?? [], ['statut' => 'valide']);
 
         return redirect()->route('competitions.index')
             ->with('success', 'Compétition ' . $competition->titre . ' modifiée !');

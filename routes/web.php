@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CompetitionController;
 use App\Http\Controllers\HalaqaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -74,6 +75,27 @@ Route::middleware(['auth', 'check.status'])->group(function () {
         /*
             * Routes pour la gestion des Competitions
          */
+
+        //Afficher le formulaire de creation d'une Competition
+        Route::get('/competitions/create', [CompetitionController::class, 'create'])->name('competitions.create');
+
+        //Enregistrer une Competition
+        Route::post('/competitions', [CompetitionController::class, 'store'])->name('competitions.store');
+
+        //Afficher le formulaire de modification d'une Competition
+        Route::get('/competitions/{competition}/edit', [CompetitionController::class, 'edit'])->name('competitions.edit');
+
+        //Afficher une Competition
+        Route::get('/competitions/{competition}', [CompetitionController::class, 'show'])->name('competitions.show');
+
+        //Modifier les infos d'une Competition
+        Route::put('/competitions/{competition}', [CompetitionController::class, 'update'])->name('competitions.update');
+
+        //Supprimer une Competition
+        Route::delete('/competitions/{competition}', [CompetitionController::class, 'destroy'])->name('competitions.destroy');
+
+        //Afficher toutes les Competitions
+        Route::get('/competitions', [CompetitionController::class, 'index'])->name('competitions.index');
 
         
         

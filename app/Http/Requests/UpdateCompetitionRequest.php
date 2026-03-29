@@ -24,9 +24,11 @@ class UpdateCompetitionRequest extends FormRequest
     {
         return [
             'titre' => 'required|string|min:5|max:100|unique:competitions,titre,' . $this->route('competition')->id,
-            'description' => 'nullable|text|max:1000',
+            'description' => 'nullable|string|max:1000',
             'date_debut' => 'required|date|after_or_equal:today',
             'date_fin' => 'required|date|after_or_equal:date_debut',
+            'students' => 'nullable|array',
+            'students.*' => 'exists:students,id',
         ];
     }
 }
